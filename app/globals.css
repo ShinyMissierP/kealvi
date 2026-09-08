@@ -1,55 +1,83 @@
 html {
-  font-size: 125%;
+  font-size: 100%;
 }
 
-/* 🌈 GLOBAL BACKGROUND (purple + white theme) */
 body {
-  font-size: 20px;
+  margin: 0;
+  min-height: 100vh;
   font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #1f2937;
 
-  /* soft purple gradient background */
   background: linear-gradient(
     135deg,
     #f5f3ff 0%,
-    #ffffff 50%,
+    #ffffff 55%,
     #ede9fe 100%
   );
-
-  min-height: 100vh;
-  margin: 0;
-  color: #1f2937; /* dark gray text */
 }
 
-/* 🧠 HEADINGS */
+/* Main headings */
 h1 {
-  font-size: 48px;
-  color: #5b21b6; /* deep purple */
+  font-size: 36px;
+  color: #5b21b6;
 }
 
 h2 {
-  font-size: 36px;
+  font-size: 24px;
   color: #6d28d9;
 }
 
-/* ✍️ INPUTS */
+/* Inputs */
 input,
-button {
-  font-size: 18px;
-  padding: 8px 12px;
-  border-radius: 8px;
+textarea {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-/* 📋 LIST ITEMS */
-li {
-  font-size: 20px;
-}
-
-/* ✨ OPTIONAL: nicer buttons globally */
+/* Buttons */
 button {
+  font-family: Arial, sans-serif;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 button:hover {
   transform: translateY(-1px);
+}
+
+/* Search box */
+input {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  outline: none;
+}
+
+input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px #ede9fe;
+}
+
+/* Question list */
+li {
+  font-size: 16px;
+}
+
+/* Links */
+a {
+  color: #6d28d9;
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 30px;
+  }
+
+  body {
+    font-size: 15px;
+  }
 }
