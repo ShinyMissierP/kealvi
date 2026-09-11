@@ -4,18 +4,18 @@ import { useState } from "react";
 
 export default function AskGemini() {
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function askGemini() {
-    if (!question.trim()) {
+    const trimmedQuestion = question.trim();
+
+    if (!trimmedQuestion) {
       setError("Please enter a question.");
       return;
     }
 
     setLoading(true);
-    setAnswer("");
     setError("");
 
     try {
@@ -24,19 +24,36 @@ export default function AskGemini() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({
+          question: trimmedQuestion,
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to generate answer");
+        throw new Error(
+          data.error || "Failed to generate answer"
+        );
       }
 
-      setAnswer(data.answer);
+      // Add the question to the existing Q&A list
+      window.dispatchEvent(
+        new CustomEvent("gemini-question-added", {
+          detail: {
+            id: `gemini-${Date.now()}`,
+            question: trimmedQuestion,
+            answer: data.answer || "",
+          },
+        })
+      );
+
+      setQuestion("");
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Something went wrong"
+        err instanceof Error
+          ? err.message
+          : "Something went wrong"
       );
     } finally {
       setLoading(false);
@@ -46,13 +63,13 @@ export default function AskGemini() {
   return (
     <div
       style={{
-        marginBottom: "32px",
+        marginBottom: "30px",
         width: "100%",
       }}
     >
       <div
         style={{
-          fontSize: "15px",
+          fontSize: "13px",
           fontWeight: "500",
           color: "#4b5563",
           marginBottom: "8px",
@@ -65,18 +82,19 @@ export default function AskGemini() {
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Type your question..."
-        rows={3}
+        rows={2}
         style={{
           display: "block",
           width: "25%",
+          minWidth: "260px",
           boxSizing: "border-box",
-          padding: "12px 14px",
+          padding: "10px 12px",
           border: "1px solid #d8b4fe",
           borderRadius: "8px",
           backgroundColor: "#ffffff",
           fontSize: "14px",
           color: "#1f2937",
-          resize: "vertical",
+          resize: "none",
           outline: "none",
         }}
       />
@@ -85,13 +103,12 @@ export default function AskGemini() {
         onClick={askGemini}
         disabled={loading}
         style={{
-          display: "block",
           marginTop: "12px",
           padding: "10px 20px",
           border: "none",
           borderRadius: "8px",
           backgroundColor: "#6d28d9",
-          color: "white",
+          color: "#ffffff",
           fontSize: "14px",
           fontWeight: "600",
           cursor: loading ? "not-allowed" : "pointer",
@@ -104,46 +121,13 @@ export default function AskGemini() {
       {error && (
         <p
           style={{
-            marginTop: "12px",
+            marginTop: "10px",
             color: "#dc2626",
-            fontSize: "14px",
+            fontSize: "13px",
           }}
         >
           {error}
         </p>
-      )}
-
-      {answer && (
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "16px",
-            border: "1px solid #e9d5ff",
-            borderRadius: "8px",
-            backgroundColor: "#faf5ff",
-          }}
-        >
-          <div
-            style={{
-              marginBottom: "6px",
-              fontSize: "14px",
-              fontWeight: "600",
-              color: "#6d28d9",
-            }}
-          >
-            Gemini's Answer
-          </div>
-
-          <div
-            style={{
-              fontSize: "14px",
-              lineHeight: "1.6",
-              color: "#374151",
-            }}
-          >
-            {answer}
-          </div>
-        </div>
       )}
     </div>
   );

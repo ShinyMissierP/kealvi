@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.7-flash",
+      model: "gemini-3.1-flash-lite",
       contents: `Improve the following search phrase.
 Fix grammar and spelling and make it clearer, but keep the same meaning.
 Return ONLY the improved phrase, with no explanation.
