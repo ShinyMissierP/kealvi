@@ -9,6 +9,7 @@ export default function QuestionsList({
   const [questions, setQuestions] = useState(initialQuestions);
   const [query, setQuery] = useState("");
   const [hasMore, setHasMore] = useState(initialHasMore);
+  const [voterId] = useState(() => crypto.randomUUID());
 
   const [improving, setImproving] = useState(false);
   const [improveError, setImproveError] = useState("");
